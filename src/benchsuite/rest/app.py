@@ -18,6 +18,7 @@
 # Developed in the ARTIST EU project (www.artist-project.eu) and in the
 # CloudPerfect EU project (https://cloudperfect.eu/)
 import logging
+import signal
 import sys
 
 from flask import Flask
@@ -31,14 +32,22 @@ app = Flask(__name__)
 
 app.register_blueprint(blueprint1)
 
+def set_exit_handler(func):
+    signal.signal(signal.SIGTERM, func)
+    signal.signal(signal.SIGINT, func)
+
+def on_exit(sig, func=None):
+    print('Exiting...')
+    sys.exit(1)
+
 
 if __name__ == '__main__':
-
+    set_exit_handler(on_exit)
 
     logging.basicConfig(
         level=logging.DEBUG,
         stream=sys.stdout)
 
-
-
+    print('Using internal server. Not use this in production!!!')
     app.run(debug=True)
+

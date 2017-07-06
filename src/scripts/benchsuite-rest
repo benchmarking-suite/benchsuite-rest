@@ -1,0 +1,35 @@
+#!/bin/sh
+# chkconfig: 123456 90 10
+# TTS Server for Speech Synthesis
+#
+
+OUTPUT_FILE=benchsuite-rest.log
+
+start() {
+    python -m benchsuite.rest.app >> $OUTPUT_FILE 2>&1 &
+    echo "Server started."
+}
+
+stop() {
+    pid=`ps -ef | grep '[p]ython -m benchsuite.rest.app' | awk '{ print $2 }'`
+    kill $pid
+    sleep 2
+    echo "Server killed (pid was $pid)"
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  *)
+    echo "Usage: benchsuite-rest {start|stop|restart}"
+    exit 1
+esac
+exit 0

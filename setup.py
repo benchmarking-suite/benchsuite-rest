@@ -8,6 +8,7 @@ setup(
     packages=find_packages('src'),
     namespace_packages=['benchsuite'],
     package_dir={'': 'src'},
+    scripts=['src/scripts/benchsuite-rest'],
     url='https://github.com/benchmarking-suite/benchsuite-rest',
     license='',
     author='Gabriele Giammatteo',
