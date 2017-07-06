@@ -28,22 +28,8 @@ blueprint = Blueprint('apiv1', __name__, url_prefix='/api/v1')
 
 
 description = '''
-![Image](data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA1CAYAAAAUGCjAAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4QUYDTQaAhELWQAAAuFJREFUaN7t2k1PGkEYB/D/CixkbevF9tL0I7QnLr5wUrzIelBRAk0PjV4akwab9Ip8APeiadK0EhJsm1qQVvRgQGM0mLQfoumll7Y0TRsW3GU7PZQQ0UVAmdkN2Sd5LuQZ4Me87MwEjhBC0MXRgy4PC2gBLaAFtIDMgEtLS+A4rqMZj8dr76+qKqbHx3XrVlZWLgW0t9tgEcCTK/6qGoDHggDZ7UYgEPj/mqbhgd+PXwcH+AzAeap+GUChUGADRAdx73d34XK5oGka7k9N4Xs2i5eyDL6Dn2c3Ay40OYkfuVzHcUyBejhVVTEjivhzdEQFx2wVNQrHBGgkjvoQbYTziyKKDHBUe7AZ7gUDHDWgHk5RFOa4todoX18fogCkFmp9AwP4sLMDp9MJRVEwI4qo5PNYk2Wmz6a2ejAcDoMQ0lJmcrkazu/zoZLP41mxyHxnQX0VnZ2YwN/jY0NwTIAulwsnhMComy3qwPVUCv1jY3goCDjppuPSjChCVVXYbDYkkknc8noxLwhQzN6DiwC+NskvAH7v7WH2FHI9lcJNrxdzjJFUhqgDwPNSCfLh4Tlk/+goUyS1OdgI+WpzkymS6iLTCJlIJnHd42GCpL6K6iEdDgc2MhlcY4Bkch5shHxXRdJcXa8MXAZw+0ze4TgsCAIqLSJ7PR4s9PbW1ZuqByORSN0+tFQuozI0hEdnvvRFSPvw8Ll60w5RnueR3N5Gz+Bgy8iNrS3YdOpNOwd5nsebdBofHQ681ZmTq6USDvf3kUgkavWv02l80qk35ZWFpmmYC4VwT1EwrXMgfioIcLvdCAaDdfV3derNd6KvXuR+q17kOpuc9i+qNxx4A0A0Gq3baNvtdvzMZrFmMK4jQ3S+mudClpve09DGMXvQG4VjAjQSRx1oNI4q0Aw4eo8Jk+AAAKSNkCSJAGgpfSMjpFwu19rGYrGW2+qlJEnkMsFZ/1WzgBbQAlpAC2gBuzf+AYAvoMr+fMcXAAAAAElFTkSuQmCC)
-This is an API to access the Benchmarking Suite
+Please go to http://benchmarking-suite.readthedocs.io/en/latest/index.html
 
-# Benchmarking Suite Model
-There are three main concepts in the Benchmarking Suite:
-- the **Service Provider**
-- the **sessions**
-- the **executions**
-- and the *benchmarks*
-
-Each BenchmarkingSession has **one** ServiceProvider and **one or more** BenchmarkExecutions
-Each BenchmarkExecution has an ExecutionEnvironment and one Benchmark
-
-When the _prepare_ operation is invoked on a BenchmarkExecution, the execution environment is prepared (if it is not exists yet, a new one is requested to the Provider). Then the install commands for the execution BenchmarkTest are executed
- 
-![image](https://yuml.me/diagram/scruffy/class/[BenchmarkingSession]->[ServiceProvider], [BenchmarkingSession]<>->[BenchmarkExecution])
 
 '''
 
