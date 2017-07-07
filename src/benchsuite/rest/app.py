@@ -20,11 +20,13 @@
 import logging
 import signal
 import sys
+import json
 
 from flask import Flask
+from flask_restplus import Swagger
 
 from benchsuite.rest.apiv1 import blueprint as blueprint1
-
+from benchsuite.rest.apiv1 import api as apiv1
 app = Flask(__name__)
 
 
@@ -41,12 +43,26 @@ def on_exit(sig, func=None):
     sys.exit(1)
 
 
+def dump_swagger_specs():
+    app.config['SERVER_NAME'] = 'example.org:80'
+    with app.app_context():
+        print()
+        with open('swagger-apiv1.json', 'w') as outfile:
+            json.dump(Swagger(apiv1).as_dict(), outfile)
+
+
 if __name__ == '__main__':
     set_exit_handler(on_exit)
 
     logging.basicConfig(
         level=logging.DEBUG,
         stream=sys.stdout)
+
+    if len(sys.argv) > 1 and sys.argv[1] == '--dump-specs':
+        dump_swagger_specs()
+        sys.exit(0)
+
+
 
     print('Using internal server. Not use this in production!!!')
     app.run(debug=True)
