@@ -20,7 +20,7 @@
 
 from flask_restplus import Namespace, fields, Resource
 
-from benchsuite.controller import BenchmarkingController
+from benchsuite.controller.controller import BenchmarkingController
 
 api = Namespace('benchmarks', description='Benchmarks operations')
 
