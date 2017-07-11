@@ -14,5 +14,5 @@ setup(
     author='Gabriele Giammatteo',
     author_email='gabriele.giammatteo@eng.it',
     description='',
-    install_requires=['benchsuite.controller', 'flask-restplus', 'benchsuite.core']
+    install_requires=['flask-restplus', 'benchsuite.core']
 )
