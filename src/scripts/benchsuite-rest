@@ -28,8 +28,11 @@ case "$1" in
     stop
     start
     ;;
+  run)
+    python -m benchsuite.rest.app
+    ;;
   *)
-    echo "Usage: benchsuite-rest {start|stop|restart}"
+    echo "Usage: benchsuite-rest {start|stop|restart|run}"
     exit 1
 esac
 exit 0
