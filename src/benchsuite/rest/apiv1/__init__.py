@@ -27,17 +27,44 @@ from benchsuite.core.model.exception import ControllerConfigurationException, Ba
 blueprint = Blueprint('apiv1', __name__, url_prefix='/api/v1')
 
 description = '''
-This API allows to execute all the Benchmarking Suite operations and it is equivalent to the command line tool.
+This short tutorial will show you the basic usage of this API. The full Benchmarking Suite documentation can be found at https://benchmarking-suite.readthedocs.io/
 
-### Sessions
-The sessions operations allow to list the existing sessions, create new sessions, destroy sessions.
+## How to use this API
 
+1. First we create a new Benchmarking Session with a POST at http://localhost:5000/api/v1/sessions/. In the request, we specify the provider and the service type.
 
-### Executions
+    ~~~
+    {
+       "provider": "filab-vicenza",
+       "service": "centos_medium" 
+     }
+    ~~~
+    
+    Alternatively, it is possible to specify the configuration directly in the request:
+    ~~~
+    {
+       "config": "[provider]\\nclass = benchsuite.stdlib.provider.existing_vm.ExistingVMProvider\\n[my_vm1]\\nip_address = 217.172.12.215\\nkey_path = /home/ggiammat/credentials/filab-vicenza/ggiammat-key.pem\\nuser = ubuntu\\nplatform = ubuntu"
+     }
+    ~~~
+    
+    **Attention**: in this case passwords will be visible in the request.
+    
+    **Attention**: the config must be specified on a single line (JSON does not allow multiline strings) with '\\n' to delimit newlines.
 
+2. Now we create a new execution in the newly created benchmarking session with a POST at http://localhost:5000/api/v1/sessions/<SESSION_ID>/executions/. In the request we specify the tool and the workload:
+    ~~~
+    {
+      "tool": "cfd",
+      "workload": "workload1"
+    }
+    ~~~
 
+3. Now we can prepare the execution with a POST to http://localhost:5000/api/v1/executions/<EXECUTION_ID>/prepare
 
-The full Benchmarking Suite documentation can be found at https://benchmarking-suite.readthedocs.io/
+4. Finally a POST to http://localhost:5000/api/v1/executions/<EXECUTION_ID>/run will execute the test
+
+** You can experiment the API usage directly from this page. Continue to read ... **
+
 '''
 
 api = Api(

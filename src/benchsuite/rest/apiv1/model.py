@@ -23,3 +23,7 @@ import datetime
 
 def timestamp_to_string(t=None):
     return datetime.datetime.fromtimestamp(t).strftime('%Y-%m-%d %H:%M:%S')
+
+
+class APIException(Exception):
+    pass

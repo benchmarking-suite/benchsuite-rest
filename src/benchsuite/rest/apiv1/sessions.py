@@ -22,6 +22,7 @@ from benchsuite.core.controller import BenchmarkingController
 from flask_restplus import Namespace, Resource, fields
 from datetime import datetime
 from benchsuite.rest.apiv1.executions import new_execution_model, execution_model
+from benchsuite.rest.apiv1.model import APIException
 
 api = Namespace('sessions', description='Benchmarking Sessions operations')
 
@@ -30,9 +31,7 @@ api.models[new_execution_model.name] = new_execution_model
 
 provider_model = api.model('Provider', {
     'id': fields.String,
-    'type': fields.String,
-    'image': fields.String,
-    'size': fields.String
+    'type': fields.String
 })
 
 session_model = api.model('Session', {
@@ -43,8 +42,10 @@ session_model = api.model('Session', {
 })
 
 new_session_model = api.model('NewSession', {
-    'provider': fields.String,
-    'service-type': fields.String
+    'provider': fields.String(required=False),
+    'service': fields.String(required=False),
+    'config': fields.String(required=False, description="Specify the provider configuration as a string without "
+                                                        "loading it from the Benchmarking Suite configuration folder")
 })
 
 @api.route('/')
@@ -60,7 +61,14 @@ class SessionList(Resource):
                       description='Creates a new benchmarking session. Returns the newly created session')
     def post(self):
         with BenchmarkingController() as bc:
-            return bc.new_session(self.api.payload['provider'], self.api.payload['service-type'])
+
+            if 'provider' in self.api.payload and 'service' in self.api.payload:
+                return bc.new_session(self.api.payload['provider'], self.api.payload['service'])
+
+            if 'config' in self.api.payload:
+                return bc.new_session_by_config_string(self.api.payload['config'])
+
+            raise APIException('Either config or provider must be specified')
 
 
 @api.route('/<string:session_id>')
