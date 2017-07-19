@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='benchsuite.rest',
-    version='2.0.0-dev12',
+    version='2.0.0-dev13',
     packages=find_packages('src'),
     namespace_packages=['benchsuite'],
     package_dir={'': 'src'},

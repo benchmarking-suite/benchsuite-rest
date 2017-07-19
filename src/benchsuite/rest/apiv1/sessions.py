@@ -20,7 +20,7 @@
 
 from benchsuite.core.controller import BenchmarkingController
 from flask_restplus import Namespace, Resource, fields
-
+from datetime import datetime
 from benchsuite.rest.apiv1.executions import new_execution_model, execution_model
 
 api = Namespace('sessions', description='Benchmarking Sessions operations')
@@ -38,8 +38,8 @@ provider_model = api.model('Provider', {
 session_model = api.model('Session', {
     'id': fields.String,
     'provider': fields.Nested(provider_model),
-    'created': fields.String,
-    'executions': fields.String
+    'created': fields.String(attribute=lambda x: datetime.fromtimestamp(x.created).strftime('%Y-%m-%d %H:%M:%S')),
+    'executions': fields.Nested(execution_model, as_list=True, attribute=lambda x: list(x.executions.values()))
 })
 
 new_session_model = api.model('NewSession', {
@@ -50,26 +50,29 @@ new_session_model = api.model('NewSession', {
 @api.route('/')
 class SessionList(Resource):
 
-    @api.marshal_with(session_model)
+    @api.marshal_with(session_model, as_list=True, code=200, description='Returns the list of the existing sessions')
     def get(self):
         with BenchmarkingController() as bc:
             return list(bc.list_sessions())
 
     @api.expect(new_session_model)
-    @api.marshal_with(session_model)
+    @api.marshal_with(session_model, code=204,
+                      description='Creates a new benchmarking session. Returns the newly created session')
     def post(self):
         with BenchmarkingController() as bc:
             return bc.new_session(self.api.payload['provider'], self.api.payload['service-type'])
 
 
 @api.route('/<string:session_id>')
+@api.param('session_id', 'The id of the session')
 class Session(Resource):
 
-    @api.marshal_with(session_model)
+    @api.marshal_with(session_model, as_list=False, code=200, description='The session with the requested session id')
     def get(self, session_id):
         with BenchmarkingController() as bc:
             return bc.get_session(session_id)
 
+    @api.response(204, description='Deletes a benchmarking session')
     def delete(self, session_id):
         with BenchmarkingController() as bc:
             bc.destroy_session(session_id)
@@ -79,14 +82,16 @@ class Session(Resource):
 @api.route('/<string:session_id>/executions/')
 class SessionExecution(Resource):
 
-    @api.marshal_with(execution_model)
+    @api.marshal_with(execution_model, code=200,
+                      description='Returns the executions associated with this session')
     def get(self, session_id):
         with BenchmarkingController() as bc:
             return list(bc.get_session(session_id).list_executions())
 
 
     @api.expect(new_execution_model)
-    @api.marshal_with(execution_model, code=200)
+    @api.marshal_with(execution_model, code=200,
+                      description='Creates a new execution in this benchmarking session. Returns the newly created execution')
     def post(self, session_id):
         with BenchmarkingController() as bc:
             return bc.new_execution(session_id, self.api.payload['tool'], self.api.payload['workload'])

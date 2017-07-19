@@ -18,22 +18,8 @@
 # Developed in the ARTIST EU project (www.artist-project.eu) and in the
 # CloudPerfect EU project (https://cloudperfect.eu/)
 
-from flask_restplus import Namespace, fields, Resource
 
-from benchsuite.core.controller import BenchmarkingController
+import datetime
 
-api = Namespace('benchmarks', description='Benchmarks operations')
-
-benchmark_model = api.model('Benchmark', {
-    'name': fields.String,
-    'workload': fields.String
-})
-
-
-@api.route('/')
-class BenchmarkList(Resource):
-
-    @api.marshal_with(benchmark_model)
-    def get(self):
-        with BenchmarkingController() as bc:
-            return list(bc.list_executions())
+def timestamp_to_string(t=None):
+    return datetime.datetime.fromtimestamp(t).strftime('%Y-%m-%d %H:%M:%S')

@@ -20,17 +20,24 @@
 
 
 from flask import Blueprint
-from flask_restplus import Api, fields
+from flask_restplus import Api, fields, Resource
 
 from benchsuite.core.model.exception import ControllerConfigurationException, BashCommandExecutionFailedException
 
 blueprint = Blueprint('apiv1', __name__, url_prefix='/api/v1')
 
-
 description = '''
-Please go to http://benchmarking-suite.readthedocs.io/en/latest/index.html
+This API allows to execute all the Benchmarking Suite operations and it is equivalent to the command line tool.
+
+### Sessions
+The sessions operations allow to list the existing sessions, create new sessions, destroy sessions.
 
 
+### Executions
+
+
+
+The full Benchmarking Suite documentation can be found at https://benchmarking-suite.readthedocs.io/
 '''
 
 api = Api(
@@ -55,9 +62,6 @@ def handle_custom_exception(error):
 @api.errorhandler(BashCommandExecutionFailedException)
 def handle_command_failed_exception(error):
     return {'message': str(error), 'stdout': str(error.stdout), 'stderr': str(error.stderr)}, 400
-
-
-
 
 
 from .executions import api as executions_ns

@@ -17,12 +17,14 @@
 #
 # Developed in the ARTIST EU project (www.artist-project.eu) and in the
 # CloudPerfect EU project (https://cloudperfect.eu/)
+from datetime import datetime
 
 from benchsuite.core.controller import BenchmarkingController
 from flask_restplus import Namespace, Resource, fields
 
 from benchsuite.rest.apiv1 import bash_command_failed_model
 from benchsuite.rest.apiv1.benchmarks import benchmark_model
+from benchsuite.rest.apiv1.model import timestamp_to_string
 
 api = Namespace('executions', description='Executions operations')
 
@@ -33,12 +35,18 @@ api.models[benchmark_model.name] = benchmark_model
 
 execution_model = api.model('Execution', {
     'id': fields.String,
-    'test': fields.Nested(benchmark_model)
+    'test': fields.Nested(benchmark_model),
+    'created': fields.String(attribute=lambda x: timestamp_to_string(x.created))
 })
 
 new_execution_model = api.model('NewExecution', {
     'tool': fields.String,
     'workload': fields.String
+})
+
+execution_command_info_model = api.model('ExecutionCommand', {
+    'started': fields.String(attribute=lambda x: timestamp_to_string(x.started)),
+    'duration': fields.String
 })
 
 
@@ -63,19 +71,17 @@ class Execution(Resource):
 @api.route('/<string:exec_id>/prepare')
 class ExecutionPrepareACtion(Resource):
 
+    @api.marshal_with(execution_command_info_model, code=200, description='Runs the prepare commands')
     def post(self, exec_id):
         with BenchmarkingController() as bc:
-            bc.prepare_execution(exec_id)
-            print('ciao')
-            return '', 204
+            return bc.prepare_execution(exec_id)
+
 
 
 @api.route('/<string:exec_id>/run')
 class ExecutionRunACtion(Resource):
 
-    @api.response(204, 'Success')
-    @api.response(400, 'Error', model=bash_command_failed_model)
+    @api.marshal_with(execution_command_info_model, code=200, description='Runs the run commands')
     def post(self, exec_id):
         with BenchmarkingController() as bc:
-            bc.run_execution(exec_id)
-            return '', 204
+            return bc.run_execution(exec_id)
