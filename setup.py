@@ -23,8 +23,8 @@ from setuptools import find_packages
 
 # import the VERSION from the source code
 import sys
-sys.path.append('src/')
-from benchsuite.rest import VERSION
+sys.path.append(os.getcwd() + '/src/benchsuite')
+from rest import VERSION
 
 setup(
     name='benchsuite.rest',
