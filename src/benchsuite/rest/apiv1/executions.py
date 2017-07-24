@@ -21,16 +21,16 @@ from datetime import datetime
 
 from benchsuite.core.controller import BenchmarkingController
 from flask_restplus import Namespace, Resource, fields
-
-from benchsuite.rest.apiv1 import bash_command_failed_model
-from benchsuite.rest.apiv1.benchmarks import benchmark_model
 from benchsuite.rest.apiv1.model import timestamp_to_string
 
 api = Namespace('executions', description='Executions operations')
 
 
 # register models from the other namespaces
-api.models[benchmark_model.name] = benchmark_model
+benchmark_model = api.model('Benchmark', {
+    'name': fields.String,
+    'workload': fields.String
+})
 
 
 execution_model = api.model('Execution', {

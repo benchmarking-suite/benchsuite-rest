@@ -22,16 +22,17 @@ from benchsuite.core.controller import BenchmarkingController
 
 api = Namespace('benchmarks', description='Benchmarks operations')
 
-benchmark_model = api.model('Benchmark', {
+
+benchmark_config_model = api.model('BenchmarkConfiguration', {
     'name': fields.String,
-    'workload': fields.String
+    'workloads': fields.List(fields.String)
 })
 
 
 @api.route('/')
-class BenchmarkList(Resource):
+class BenchmarkConfigurationsList(Resource):
 
-    @api.marshal_with(benchmark_model)
+    @api.marshal_with(benchmark_config_model, as_list=True, code=200, description='Returns the list of all benchmarks configuration files found')
     def get(self):
         with BenchmarkingController() as bc:
-            return list(bc.list_executions())
+            return bc.list_available_benchmarks()

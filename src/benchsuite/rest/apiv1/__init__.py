@@ -96,8 +96,11 @@ def handle_undefined_session(error):
 
 from .executions import api as executions_ns
 from .sessions import api as sessions_ns
+from .providers import api as providers_ns
+from .benchmarks import api as benchmarks_ns
 
 api.add_namespace(sessions_ns)
 api.add_namespace(executions_ns)
-#api.add_namespace(benchmarks_ns)
+api.add_namespace(providers_ns)
+api.add_namespace(benchmarks_ns)
 

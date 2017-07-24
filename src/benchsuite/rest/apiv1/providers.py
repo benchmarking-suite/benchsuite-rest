@@ -16,3 +16,23 @@
 #
 # Developed in the ARTIST EU project (www.artist-project.eu) and in the
 # CloudPerfect EU project (https://cloudperfect.eu/)
+from flask_restplus import Namespace, fields, Resource
+
+from benchsuite.core.controller import BenchmarkingController
+
+api = Namespace('providers', description='Service Providers operations')
+
+
+provider_config_model = api.model('ProviderConfiguration', {
+    'name': fields.String,
+    'service_types': fields.List(fields.String)
+})
+
+
+@api.route('/')
+class ServiceProviderConfigurationList(Resource):
+
+    @api.marshal_with(provider_config_model, as_list=True, code=200, description='Returns the list of all service providers configuration files found')
+    def get(self):
+        with BenchmarkingController() as bc:
+            return bc.list_available_providers()
