@@ -21,7 +21,8 @@
 from flask import Blueprint
 from flask_restplus import Api, fields, Resource
 
-from benchsuite.core.model.exception import ControllerConfigurationException, BashCommandExecutionFailedException
+from benchsuite.core.model.exception import ControllerConfigurationException, BashCommandExecutionFailedException, \
+    UndefinedSessionException
 
 blueprint = Blueprint('apiv1', __name__, url_prefix='/api/v1')
 
@@ -89,6 +90,9 @@ def handle_custom_exception(error):
 def handle_command_failed_exception(error):
     return {'message': str(error), 'stdout': str(error.stdout), 'stderr': str(error.stderr)}, 400
 
+@api.errorhandler(UndefinedSessionException)
+def handle_undefined_session(error):
+    return {'message': str(error)}, 400
 
 from .executions import api as executions_ns
 from .sessions import api as sessions_ns
