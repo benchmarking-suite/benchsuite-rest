@@ -18,6 +18,7 @@
 # Developed in the ARTIST EU project (www.artist-project.eu) and in the
 # CloudPerfect EU project (https://cloudperfect.eu/)
 
+
 OUTPUT_FILE=benchsuite-rest.log
 
 # functions to forward SIGTERM and SIGKILL signals to the server when running with "run"
