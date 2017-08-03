@@ -34,9 +34,8 @@ app = Flask(__name__)
 
 app.register_blueprint(blueprint1)
 
-
 def on_exit(sig, func=None):
-    print('Exiting...')
+    print('Bye bye...')
     sys.exit(1)
 
 
@@ -50,10 +49,7 @@ def dump_swagger_specs():
 
 if __name__ == '__main__':
 
-    signal.signal(signal.SIGTERM, on_exit)
     signal.signal(signal.SIGINT, on_exit)
-    signal.signal(signal.SIGKILL, on_exit)
-
 
     logging.basicConfig(
         level=logging.DEBUG,

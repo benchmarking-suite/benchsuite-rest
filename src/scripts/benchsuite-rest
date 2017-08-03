@@ -20,6 +20,16 @@
 
 OUTPUT_FILE=benchsuite-rest.log
 
+# functions to forward SIGTERM and SIGKILL signals to the server when running with "run"
+# https://unix.stackexchange.com/questions/146756/forward-sigterm-to-child-in-bash
+_term() {
+  echo "Caught SIGTERM signal. Forwarding to the application (kill -TERM $child)"
+
+  kill -TERM "$child"
+
+}
+trap _term TERM
+
 start() {
     python -m benchsuite.rest.app >> $OUTPUT_FILE 2>&1 &
     echo "Server started."
@@ -44,7 +54,9 @@ case "$1" in
     start
     ;;
   run)
-    python -m benchsuite.rest.app
+    python -m benchsuite.rest.app &
+    child=$!
+    wait "$child"
     ;;
   *)
     echo "Usage: benchsuite-rest {start|stop|restart|run}"
