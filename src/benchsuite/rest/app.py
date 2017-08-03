@@ -34,9 +34,6 @@ app = Flask(__name__)
 
 app.register_blueprint(blueprint1)
 
-def set_exit_handler(func):
-    signal.signal(signal.SIGTERM, func)
-    signal.signal(signal.SIGINT, func)
 
 def on_exit(sig, func=None):
     print('Exiting...')
@@ -52,7 +49,11 @@ def dump_swagger_specs():
 
 
 if __name__ == '__main__':
-    set_exit_handler(on_exit)
+
+    signal.signal(signal.SIGTERM, on_exit)
+    signal.signal(signal.SIGINT, on_exit)
+    signal.signal(signal.SIGKILL, on_exit)
+
 
     logging.basicConfig(
         level=logging.DEBUG,
@@ -63,7 +64,7 @@ if __name__ == '__main__':
         sys.exit(0)
 
 
-
+    #TODO: use nginx here instead of the internal server
     print('Using internal server. Not use this in production!!!')
     app.run(debug=True)
 
