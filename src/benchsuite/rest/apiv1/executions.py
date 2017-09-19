@@ -29,7 +29,10 @@ api = Namespace('executions', description='Executions operations')
 # register models from the other namespaces
 benchmark_model = api.model('Benchmark', {
     'name': fields.String,
-    'workload': fields.String
+    'workload': fields.String,
+    'tool_name': fields.String,
+    'workload_name': fields.String,
+    'workload_description': fields.String,
 })
 
 

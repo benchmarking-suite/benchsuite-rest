@@ -16,6 +16,7 @@
 #
 # Developed in the ARTIST EU project (www.artist-project.eu) and in the
 # CloudPerfect EU project (https://cloudperfect.eu/)
+
 from flask_restplus import Namespace, fields, Resource
 
 from benchsuite.core.controller import BenchmarkingController
