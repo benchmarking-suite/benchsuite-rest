@@ -28,17 +28,27 @@ api = Namespace('executions', description='Executions operations')
 
 # register models from the other namespaces
 benchmark_model = api.model('Benchmark', {
-    'name': fields.String,
-    'workload': fields.String,
+    'tool_id': fields.String,
+    'workload_id': fields.String,
     'tool_name': fields.String,
     'workload_name': fields.String,
     'workload_description': fields.String,
 })
 
+vm_model = api.model('VM', {
+    'id': fields.String,
+    'ip': fields.String,
+    'platform': fields.String
+})
+
+execution_env_model = api.model('ExecutionEnvironment', {
+    'vms': fields.List(fields.Nested(vm_model))
+})
 
 execution_model = api.model('Execution', {
     'id': fields.String,
     'test': fields.Nested(benchmark_model),
+    'exec_env': fields.Nested(execution_env_model),
     'created': fields.String(attribute=lambda x: timestamp_to_string(x.created))
 })
 
