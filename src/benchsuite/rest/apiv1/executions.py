@@ -36,9 +36,14 @@ benchmark_model = api.model('Benchmark', {
 })
 
 vm_model = api.model('VM', {
-    'id': fields.String,
-    'ip': fields.String,
-    'platform': fields.String
+    'id': fields.String(
+        description='the id of the VM as assigned by the Cloud Management Software (e.g. OpenStack)'),
+
+    'ip': fields.String(
+        description='the public ip of the VM'),
+
+    'platform': fields.String(
+        description='the VM platform (e.g. "Ubuntu")')
 })
 
 execution_env_model = api.model('ExecutionEnvironment', {
