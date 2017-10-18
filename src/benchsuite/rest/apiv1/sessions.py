@@ -65,7 +65,7 @@ class SessionList(Resource):
                 return bc.new_session(self.api.payload['provider'], self.api.payload['service'])
 
             if 'config' in self.api.payload:
-                return bc.new_session_by_config_string(self.api.payload['config'])
+                return bc.new_session_by_config(self.api.payload['config'])
 
             raise APIException('Either config or provider must be specified')
 
