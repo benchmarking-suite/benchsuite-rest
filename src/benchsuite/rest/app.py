@@ -31,6 +31,7 @@ app = Flask(__name__)
 
 
 #app.config.SWAGGER_UI_JSONEDITOR = True
+app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
 app.register_blueprint(blueprint1)
 

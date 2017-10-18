@@ -28,7 +28,10 @@ blueprint = Blueprint('apiv1', __name__, url_prefix='/api/v1')
 
 description = '''
 
-A quick tutorial on how to use the API is available in the Benchmarking Suite online documentation at http://benchmarking-suite.readthedocs.io/en/latest/rest.html#quick-start
+A quick tutorial on how to use the API is available in the Benchmarking Suite online documentation at:
+
+
+http://benchmarking-suite.readthedocs.io/en/latest/rest.html#quick-start
 
 '''
 
