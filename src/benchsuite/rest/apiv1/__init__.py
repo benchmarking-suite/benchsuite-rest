@@ -22,7 +22,7 @@ from flask import Blueprint
 from flask_restplus import Api, fields, Resource
 
 from benchsuite.core.model.exception import ControllerConfigurationException, BashCommandExecutionFailedException, \
-    UndefinedSessionException
+    UndefinedSessionException, ProviderConfigurationException, BaseBenchmarkingSuiteException
 
 blueprint = Blueprint('apiv1', __name__, url_prefix='/api/v1')
 
@@ -49,10 +49,12 @@ bash_command_failed_model = api.model('BashCommandExecutionFailed', {
     'stderr': fields.String(example='This will be the command stderr')
 })
 
-@api.errorhandler(ControllerConfigurationException)
-def handle_custom_exception(error):
-    return {'message': str(error)}, 400
 
+
+# default error handler
+@api.errorhandler
+def handle_custom_exception(error):
+    return {'message': str(error)}, 500
 
 @api.errorhandler(BashCommandExecutionFailedException)
 def handle_command_failed_exception(error):
