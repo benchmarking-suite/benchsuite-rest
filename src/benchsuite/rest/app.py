@@ -16,12 +16,13 @@
 #
 # Developed in the ARTIST EU project (www.artist-project.eu) and in the
 # CloudPerfect EU project (https://cloudperfect.eu/)
-
+import argparse
 import logging
 import signal
 import sys
 import json
 
+import os
 from flask import Flask
 from flask_restplus import Swagger
 
@@ -43,9 +44,7 @@ def on_exit(sig, func=None):
 def dump_swagger_specs():
     app.config['SERVER_NAME'] = 'example.org:80'
     with app.app_context():
-        print()
-        with open('swagger-apiv1.json', 'w') as outfile:
-            json.dump(Swagger(apiv1).as_dict(), outfile)
+        print(json.dumps(Swagger(apiv1).as_dict(), indent=2))
 
 
 if __name__ == '__main__':
@@ -56,12 +55,41 @@ if __name__ == '__main__':
         level=logging.DEBUG,
         stream=sys.stdout)
 
-    if len(sys.argv) > 1 and sys.argv[1] == '--dump-specs':
+    parser = argparse.ArgumentParser(prog='benchsuite-rest')
+    parser.add_argument('--dump-specs', action='store_true',
+                        help='dumps the Swagger specification')
+    parser.add_argument('--listen', '-l', type=str,
+                        help='set the listening host and port (e.g. 0.0.0.0:80). '
+                             'If not specified, the default is 127.0.0.1:5000')
+
+
+    # parse the arguments. They are taken both from the command line and
+    # the BENCHSUITE_REST_OPTS environment variable
+    env_opts = os.getenv('BENCHSUITE_REST_OPTS', '').split()
+    args = parser.parse_args(sys.argv[1:] + env_opts)
+
+
+
+    if args.dump_specs:
         dump_swagger_specs()
         sys.exit(0)
 
 
+
+    host = '127.0.0.1'
+    port = 5000
+
+    if args.listen:
+        if ':' in args.listen:
+            t = args.listen.rsplit(':', 1)
+            host = t[0]
+            port = int(t[1])
+        else:
+            print('ERROR: wrong format for listening address. '
+                  'Must be in the format <host>:<port>')
+            sys.exit(1)
+
     #TODO: use nginx here instead of the internal server
     print('Using internal server. Not use this in production!!!')
-    app.run(debug=True)
+    app.run(host=host, port=port, debug=True)
 
