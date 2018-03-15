@@ -17,8 +17,6 @@
 # Developed in the ARTIST EU project (www.artist-project.eu) and in the
 # CloudPerfect EU project (https://cloudperfect.eu/)
 
-from datetime import datetime
-
 from benchsuite.core.controller import BenchmarkingController
 from flask_restplus import Namespace, Resource, fields
 from benchsuite.rest.apiv1.model import timestamp_to_string
@@ -87,7 +85,7 @@ class Execution(Resource):
 
 
 @api.route('/<string:exec_id>/prepare')
-class ExecutionPrepareACtion(Resource):
+class ExecutionPrepareAction(Resource):
 
     @api.marshal_with(execution_command_info_model, code=200, description='Runs the prepare commands')
     def post(self, exec_id):
@@ -97,7 +95,7 @@ class ExecutionPrepareACtion(Resource):
 
 
 @api.route('/<string:exec_id>/run')
-class ExecutionRunACtion(Resource):
+class ExecutionRunAction(Resource):
 
     @api.marshal_with(execution_command_info_model, code=200, description='Runs the run commands')
     def post(self, exec_id):

@@ -27,7 +27,9 @@ from flask import Flask
 from flask_restplus import Swagger
 
 from benchsuite.rest.apiv1 import blueprint as blueprint1
-from benchsuite.rest.apiv1 import api as apiv1
+from benchsuite.rest.apiv2 import blueprint as blueprint2
+from benchsuite.rest.apiv2 import api as apiv2
+
 app = Flask(__name__)
 
 
@@ -35,16 +37,17 @@ app = Flask(__name__)
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
 app.register_blueprint(blueprint1)
+app.register_blueprint(blueprint2)
 
 def on_exit(sig, func=None):
     print('Bye bye...')
     sys.exit(1)
 
 
-def dump_swagger_specs():
+def generate_swagger_specs():
     app.config['SERVER_NAME'] = 'example.org:80'
     with app.app_context():
-        print(json.dumps(Swagger(apiv1).as_dict(), indent=2))
+        return json.dumps(Swagger(apiv2).as_dict(), indent=2)
 
 
 if __name__ == '__main__':
@@ -71,7 +74,7 @@ if __name__ == '__main__':
 
 
     if args.dump_specs:
-        dump_swagger_specs()
+        print(generate_swagger_specs())
         sys.exit(0)
 
 
